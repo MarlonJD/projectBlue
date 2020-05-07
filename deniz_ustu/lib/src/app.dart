@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:denizustu/src/ui/home/home.dart';
-import 'package:denizustu/src/ui/motor/motor.dart';
+import 'package:denizustu/src/ui/genel.dart';
+import 'package:denizustu/src/ui/kontrol.dart';
 
 
 class App extends StatelessWidget {
@@ -32,9 +32,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    HomeWidget(),
-    MotorWidget(),
-    HomeWidget()
+    GenelWidget(),
+    KontrolWidget(),
+    GenelWidget()
   ];
 
   @override
@@ -61,11 +61,11 @@ class _HomeState extends State<Home> {
         items: [
           new BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            title: Text('Genel'),
           ),
           new BottomNavigationBarItem(
-            icon: Icon(Icons.mail),
-            title: Text('Messages'),
+            icon: Icon(Icons.settings),
+            title: Text('Kontrol'),
           ),
           new BottomNavigationBarItem(
               icon: Icon(Icons.person),
