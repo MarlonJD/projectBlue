@@ -26,11 +26,10 @@ class _GenelWidgetState extends State<GenelWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          color: const Color(0xFF212121),
+      body: ListView(
+          //color: const Color(0xFF212121),
           padding: EdgeInsets.all(5),
-          margin: EdgeInsets.all(10),
-          child: Column(
+          children: [ Column(
             children: [
               _controller.value.initialized
                   ? AspectRatio(
@@ -39,46 +38,98 @@ class _GenelWidgetState extends State<GenelWidget> {
                     )
                   : Container(),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(5),
               ),
               Row(
-                children: [
-                  Column(
-                    children: [
-                      Card(
-                        child: ListTile(
-                          leading: FlutterLogo(),
-                          title: Text('One-line with leading widget'),
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Flexible(
+                    child: Column(
+                      children: <Widget>[
+                        Card(
+                          child: GFListTile(
+                            color: Color(0xFF4A6A8A),
+                            margin: EdgeInsets.zero,
+                            title: GFTypography(
+                              text: 'Motor Deviri',
+                              type: GFTypographyType.typo5,
+                              showDivider: false,
+                              textColor: Colors.white,
+                            ),
+                            subTitle: GFTypography(
+                              text: '0 RPM',
+                              type: GFTypographyType.typo6,
+                              showDivider: false,
+                              textColor: Color(0xFF738CA6),
+                            ),
+                          ),
+                        ),Card(
+                          child: GFListTile(
+                            color: Color(0xFF4A6A8A),
+                            margin: EdgeInsets.zero,
+                            title: GFTypography(
+                              text: 'Derinlik',
+                              type: GFTypographyType.typo5,
+                              showDivider: false,
+                              textColor: Colors.white,
+                            ),
+                            subTitle: GFTypography(
+                              text: '0 m',
+                              type: GFTypographyType.typo6,
+                              showDivider: false,
+                              textColor: Color(0xFF738CA6),
+                            ),
+                          ),
                         ),
-                      ),
-                      Card(
-                        child: ListTile(
-                          title: Text('One-line with trailing widget'),
-                          trailing: Icon(Icons.more_vert),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: [
-                      Card(
-                        child: ListTile(
-                          leading: FlutterLogo(),
-                          title: Text('One-line with leading widget'),
+                  Flexible(
+                    child: Column(
+                      children: <Widget>[
+                        Card(
+                          child: GFListTile(
+                            color: Color(0xFF4A6A8A),
+                            margin: EdgeInsets.zero,
+                            title: GFTypography(
+                              text: 'Basınç',
+                              type: GFTypographyType.typo5,
+                              showDivider: false,
+                              textColor: Colors.white,
+                            ),
+                            subTitle: GFTypography(
+                              text: '0 Pa',
+                              type: GFTypographyType.typo6,
+                              showDivider: false,
+                              textColor: Color(0xFF738CA6),
+                            ),
+                          ),
                         ),
-                      ),
-                      Card(
-                        child: ListTile(
-                          title: Text('One-line with trailing widget'),
-                          trailing: Icon(Icons.more_vert),
+                        Card(
+                          child: GFListTile(
+                            color: Color(0xFF4A6A8A),
+                            margin: EdgeInsets.zero,
+                            title: GFTypography(
+                              text: 'Sıcaklık',
+                              type: GFTypographyType.typo5,
+                              showDivider: false,
+                              textColor: Colors.white,
+                            ),
+                            subTitle: GFTypography(
+                              text: '0 °C',
+                              type: GFTypographyType.typo6,
+                              showDivider: false,
+                              textColor: Color(0xFF738CA6),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 ],
               ),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(5),
               ),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,7 +149,7 @@ class _GenelWidgetState extends State<GenelWidget> {
                     ),
                   ])
             ],
-          )),
+          )]),
     );
   }
 

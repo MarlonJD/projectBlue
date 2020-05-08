@@ -12,9 +12,9 @@ class App extends StatelessWidget {
       theme: new ThemeData(
         brightness:Brightness.dark,
         primarySwatch: Colors.blue,
-        primaryColor: const Color(0xFF212121),
+        primaryColor: const Color(0xFF041D37),
         accentColor: const Color(0xFF64ffda),
-        canvasColor: const Color(0xFF303030),
+        canvasColor: Color(0xFF2B4C6F),
         fontFamily: 'Roboto',
       ),
       home: Home(),
@@ -56,6 +56,7 @@ class _HomeState extends State<Home> {
       ),
       body: _children[_currentIndex], // new
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF133253),
         onTap: onTabTapped, // new
         currentIndex: _currentIndex, // new
         items: [

@@ -16,12 +16,13 @@ class _KontrolWidgetState extends State<KontrolWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          color: const Color(0xFF212121),
+      body: ListView(
           padding: EdgeInsets.all(5),
-          child: Column(
+          children: [
+            Column(
             children: [
               GFCard(
+                color: Color(0xFF4A6A8A),
                 padding: EdgeInsets.zero,
                 title: GFListTile(
                   margin: EdgeInsets.zero,
@@ -39,6 +40,65 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                 ),
               ),
               GFCard(
+                  color: Color(0xFF4A6A8A),
+                  padding: EdgeInsets.zero,
+                  title: GFListTile(
+                    margin: EdgeInsets.zero,
+                    title: Text('Motorlar'),
+                  ),
+                  content: Column(children: [
+                    SwitchListTile(
+                      title: const Text('Üst Motor'),
+                      value: _uMotor,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _uMotor = value;
+                        });
+                      },
+                      secondary: const Icon(Icons.flash_on),
+                    ),
+                    SwitchListTile(
+                      title: const Text('Alt Motor'),
+                      value: _aMotor,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _aMotor = value;
+                        });
+                      },
+                      secondary: const Icon(Icons.flash_on),
+                    ),
+                  ])),
+                  GFCard(
+                  color: Color(0xFF4A6A8A),
+                  padding: EdgeInsets.zero,
+                  title: GFListTile(
+                    margin: EdgeInsets.zero,
+                    title: Text('Motorlar'),
+                  ),
+                  content: Column(children: [
+                    SwitchListTile(
+                      title: const Text('Üst Motor'),
+                      value: _uMotor,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _uMotor = value;
+                        });
+                      },
+                      secondary: const Icon(Icons.flash_on),
+                    ),
+                    SwitchListTile(
+                      title: const Text('Alt Motor'),
+                      value: _aMotor,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _aMotor = value;
+                        });
+                      },
+                      secondary: const Icon(Icons.flash_on),
+                    ),
+                  ])),
+                  GFCard(
+                  color: Color(0xFF4A6A8A),
                   padding: EdgeInsets.zero,
                   title: GFListTile(
                     margin: EdgeInsets.zero,
@@ -67,7 +127,7 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                     ),
                   ])),
             ],
-          )),
+          )]),
     );
   }
 }
