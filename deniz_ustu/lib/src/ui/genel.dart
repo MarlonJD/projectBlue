@@ -15,10 +15,18 @@ class _GenelWidgetState extends State<GenelWidget> {
   VideoPlayerController _controller;
   ApiService apiService;
   BuildContext context;
+  Timer timer;
+  int counter = 0;
 
   void _fetchData() {
     setState(() {
       apiService = ApiService();
+    });
+  }
+
+  void addValue() {
+    setState(() {
+      counter++;
     });
   }
 
@@ -33,9 +41,10 @@ class _GenelWidgetState extends State<GenelWidget> {
         setState(() {});
       });
     _controller.play();
-    const fiveSeconds = const Duration(seconds: 1);
+
     // _fetchData() is your function to fetch data
-    Timer.periodic(fiveSeconds, (Timer t) => _fetchData());
+    Timer.periodic(Duration(milliseconds: 500), (Timer t) => _fetchData());
+    timer = Timer.periodic(Duration(milliseconds: 500), (Timer t) => addValue());
   }
 
   @override
@@ -60,107 +69,109 @@ class _GenelWidgetState extends State<GenelWidget> {
                   future: apiService.getPosts(),
                   builder:
                       (BuildContext context, AsyncSnapshot<Post> snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(
+                    if (snapshot.hasData) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Flexible(
+                            child: Column(
+                              children: <Widget>[
+                                Card(
+                                  child: GFListTile(
+                                    color: Color(0xFF4A6A8A),
+                                    margin: EdgeInsets.zero,
+                                    title: GFTypography(
+                                      text: 'Motor Deviri',
+                                      type: GFTypographyType.typo5,
+                                      showDivider: false,
+                                      textColor: Colors.white,
+                                    ),
+                                    subTitle: GFTypography(
+                                      text: "title: ${snapshot.data.userId}",
+                                      type: GFTypographyType.typo6,
+                                      showDivider: false,
+                                      textColor: Color(0xFF738CA6),
+                                    ),
+                                  ),
+                                ),
+                                Card(
+                                  child: GFListTile(
+                                    color: Color(0xFF4A6A8A),
+                                    margin: EdgeInsets.zero,
+                                    title: GFTypography(
+                                      text: 'Derinlik',
+                                      type: GFTypographyType.typo5,
+                                      showDivider: false,
+                                      textColor: Colors.white,
+                                    ),
+                                    subTitle: GFTypography(
+                                      text: counter.toString(),
+                                      type: GFTypographyType.typo6,
+                                      showDivider: false,
+                                      textColor: Color(0xFF738CA6),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Flexible(
+                            child: Column(
+                              children: <Widget>[
+                                Card(
+                                  child: GFListTile(
+                                    color: Color(0xFF4A6A8A),
+                                    margin: EdgeInsets.zero,
+                                    title: GFTypography(
+                                      text: 'Basınç',
+                                      type: GFTypographyType.typo5,
+                                      showDivider: false,
+                                      textColor: Colors.white,
+                                    ),
+                                    subTitle: GFTypography(
+                                      text: '0 Pa',
+                                      type: GFTypographyType.typo6,
+                                      showDivider: false,
+                                      textColor: Color(0xFF738CA6),
+                                    ),
+                                  ),
+                                ),
+                                Card(
+                                  child: GFListTile(
+                                    color: Color(0xFF4A6A8A),
+                                    margin: EdgeInsets.zero,
+                                    title: GFTypography(
+                                      text: 'Sıcaklık',
+                                      type: GFTypographyType.typo5,
+                                      showDivider: false,
+                                      textColor: Colors.white,
+                                    ),
+                                    subTitle: GFTypography(
+                                      text: '0 °C',
+                                      type: GFTypographyType.typo6,
+                                      showDivider: false,
+                                      textColor: Color(0xFF738CA6),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      );
+                    } else if (snapshot.hasError) {
+                      /* return Center(
                         child: Text(
                             "Something wrong with message: ${snapshot.error.toString()}"),
-                      );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Flexible(
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    child: GFListTile(
-                                      color: Color(0xFF4A6A8A),
-                                      margin: EdgeInsets.zero,
-                                      title: GFTypography(
-                                        text: 'Motor Deviri',
-                                        type: GFTypographyType.typo5,
-                                        showDivider: false,
-                                        textColor: Colors.white,
-                                      ),
-                                      subTitle: GFTypography(
-                                        text: "title: ${snapshot.data.userId}",
-                                        type: GFTypographyType.typo6,
-                                        showDivider: false,
-                                        textColor: Color(0xFF738CA6),
-                                      ),
-                                    ),
-                                  ),
-                                  Card(
-                                    child: GFListTile(
-                                      color: Color(0xFF4A6A8A),
-                                      margin: EdgeInsets.zero,
-                                      title: GFTypography(
-                                        text: 'Derinlik',
-                                        type: GFTypographyType.typo5,
-                                        showDivider: false,
-                                        textColor: Colors.white,
-                                      ),
-                                      subTitle: GFTypography(
-                                        text: '0 m',
-                                        type: GFTypographyType.typo6,
-                                        showDivider: false,
-                                        textColor: Color(0xFF738CA6),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Flexible(
-                              child: Column(
-                                children: <Widget>[
-                                  Card(
-                                    child: GFListTile(
-                                      color: Color(0xFF4A6A8A),
-                                      margin: EdgeInsets.zero,
-                                      title: GFTypography(
-                                        text: 'Basınç',
-                                        type: GFTypographyType.typo5,
-                                        showDivider: false,
-                                        textColor: Colors.white,
-                                      ),
-                                      subTitle: GFTypography(
-                                        text: '0 Pa',
-                                        type: GFTypographyType.typo6,
-                                        showDivider: false,
-                                        textColor: Color(0xFF738CA6),
-                                      ),
-                                    ),
-                                  ),
-                                  Card(
-                                    child: GFListTile(
-                                      color: Color(0xFF4A6A8A),
-                                      margin: EdgeInsets.zero,
-                                      title: GFTypography(
-                                        text: 'Sıcaklık',
-                                        type: GFTypographyType.typo5,
-                                        showDivider: false,
-                                        textColor: Colors.white,
-                                      ),
-                                      subTitle: GFTypography(
-                                        text: '0 °C',
-                                        type: GFTypographyType.typo6,
-                                        showDivider: false,
-                                        textColor: Color(0xFF738CA6),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        );
-                      }
-                    } else {
+                      ); */
                       return Center(
                         child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return SizedBox(
+                        child: CircularProgressIndicator(),
+                        width: 60,
+                        height: 60,
                       );
                     }
                   },
@@ -195,5 +206,6 @@ class _GenelWidgetState extends State<GenelWidget> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    timer?.cancel();
   }
 }

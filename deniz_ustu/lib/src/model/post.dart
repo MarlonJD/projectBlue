@@ -29,7 +29,7 @@ class Post {
 
 Post postFromJson(String jsonData) {
   final data = json.decode(jsonData);
-  Post post = new Post.fromJson(data["results"][0]);
+  Post post = new Post.fromJson(data);
   return post;
 }
 
