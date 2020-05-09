@@ -3,18 +3,22 @@ import 'dart:convert';
 class Post {
   int userId;
   int id;
+  String title;
+  String body;
 
-  Post({this.userId, this.id});
+  Post({this.userId, this.id, this.title, this.body});
 
   factory Post.fromJson(Map<String, dynamic> map) {
     return Post(
       userId: map["userId"],
-      id: map["id"]
+      id: map["id"],
+      title: map["title"],
+      body: map["body"]
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {"userId": userId, "id": id};
+  Map<dynamic, dynamic> toJson() {
+    return {"userId": userId, "id": id, "title": title, "body": body};
   }
 
   @override
@@ -23,9 +27,10 @@ class Post {
   }
 }
 
-List<Post> postFromJson(String jsonData) {
+Post postFromJson(String jsonData) {
   final data = json.decode(jsonData);
-  return List<Post>.from(data.map((item) => Post.fromJson(item)));
+  Post post = new Post.fromJson(data["results"][0]);
+  return post;
 }
 
 String postToJson(Post data) {
