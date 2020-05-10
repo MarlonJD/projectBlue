@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:denizustu/src/ui/home/home.dart';
-import 'package:denizustu/src/ui/motor/motor.dart';
+import 'package:denizustu/src/ui/genel.dart';
+import 'package:denizustu/src/ui/kontrol.dart';
 
 
 class App extends StatelessWidget {
@@ -12,9 +12,9 @@ class App extends StatelessWidget {
       theme: new ThemeData(
         brightness:Brightness.dark,
         primarySwatch: Colors.blue,
-        primaryColor: const Color(0xFF212121),
+        primaryColor: const Color(0xFF041D37),
         accentColor: const Color(0xFF64ffda),
-        canvasColor: const Color(0xFF303030),
+        canvasColor: Color(0xFF2B4C6F),
         fontFamily: 'Roboto',
       ),
       home: Home(),
@@ -32,9 +32,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    HomeWidget(),
-    MotorWidget(),
-    HomeWidget()
+    GenelWidget(),
+    KontrolWidget(),
+    GenelWidget()
   ];
 
   @override
@@ -56,16 +56,17 @@ class _HomeState extends State<Home> {
       ),
       body: _children[_currentIndex], // new
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF133253),
         onTap: onTabTapped, // new
         currentIndex: _currentIndex, // new
         items: [
           new BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            title: Text('Genel'),
           ),
           new BottomNavigationBarItem(
-            icon: Icon(Icons.mail),
-            title: Text('Messages'),
+            icon: Icon(Icons.settings),
+            title: Text('Kontrol'),
           ),
           new BottomNavigationBarItem(
               icon: Icon(Icons.person),
