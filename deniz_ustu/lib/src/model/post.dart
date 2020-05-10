@@ -1,39 +1,39 @@
 import 'dart:convert';
 
-class Post {
-  int userId;
-  int id;
-  String title;
-  String body;
+class Sensor{
+  int motorDevri;
+  int basinc;
+  int derinlik ;
+  int sicaklik;
 
-  Post({this.userId, this.id, this.title, this.body});
+  Sensor({this.motorDevri, this.basinc, this.derinlik, this.sicaklik});
 
-  factory Post.fromJson(Map<String, dynamic> map) {
-    return Post(
-      userId: map["userId"],
-      id: map["id"],
-      title: map["title"],
-      body: map["body"]
+  factory Sensor.fromJson(Map<String, dynamic> map) {
+    return Sensor(
+      motorDevri: map["motor_devri"],
+      basinc: map["basinc"],
+      derinlik: map["derinlik"],
+      sicaklik: map["sicaklik"]
     );
   }
 
-  Map<dynamic, dynamic> toJson() {
-    return {"userId": userId, "id": id, "title": title, "body": body};
-  }
+/*   Map<dynamic, dynamic> toJson() {
+    return {"motor_devri": motor_devri, "basinc": body, "userId": userId};
+  } */
 
-  @override
+/*   @override
   String toString() {
     return 'Post{userId: $userId, id: $id}';
-  }
+  } */
 }
 
-Post postFromJson(String jsonData) {
+ sensorFromJson(String jsonData) {
   final data = json.decode(jsonData);
-  Post post = new Post.fromJson(data);
-  return post;
+  Sensor sensor = new Sensor.fromJson(data);
+  return sensor;
 }
 
-String postToJson(Post data) {
+/* String postToJson(Post data) {
   final jsonData = data.toJson();
   return json.encode(jsonData);
-}
+} */

@@ -11,24 +11,14 @@ class GenelWidget extends StatefulWidget {
   _GenelWidgetState createState() => _GenelWidgetState();
 }
 
-class _GenelWidgetState extends State<GenelWidget> {
+class _GenelWidgetState extends State<GenelWidget> with AutomaticKeepAliveClientMixin<GenelWidget> {
   VideoPlayerController _controller;
   ApiService apiService;
   BuildContext context;
-  Timer timer;
-  int counter = 0;
+  Row _staticRow;
 
-  void _fetchData() {
-    setState(() {
-      apiService = ApiService();
-    });
-  }
-
-  void addValue() {
-    setState(() {
-      counter++;
-    });
-  }
+  @override
+  bool get wantKeepAlive => true; // ** and here
 
   @override
   void initState() {
@@ -44,16 +34,39 @@ class _GenelWidgetState extends State<GenelWidget> {
 
     // _fetchData() is your function to fetch data
     Timer.periodic(Duration(milliseconds: 500), (Timer t) => _fetchData());
-    timer = Timer.periodic(Duration(milliseconds: 500), (Timer t) => addValue());
+    _staticRow = Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      JoystickView(size: 100),
+                      GFIconButton(
+                        color: Colors.blueGrey,
+                        onPressed: () {},
+                        icon: Icon(Icons.keyboard_arrow_up),
+                        shape: GFIconButtonShape.circle,
+                      ),
+                      GFIconButton(
+                        color: Colors.blueGrey,
+                        onPressed: () {},
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        shape: GFIconButtonShape.circle,
+                      ),
+                    ]);
+  }
+
+  void _fetchData() {
+    if (!mounted) return;
+    setState(() {
+      apiService = ApiService();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: Container(
           //color: const Color(0xFF212121),
           padding: EdgeInsets.all(5),
-          children: [
+          child: 
             Column(
               children: [
                 _controller.value.initialized
@@ -66,9 +79,9 @@ class _GenelWidgetState extends State<GenelWidget> {
                   padding: EdgeInsets.all(5),
                 ),
                 FutureBuilder(
-                  future: apiService.getPosts(),
+                  future: apiService.getSensors(),
                   builder:
-                      (BuildContext context, AsyncSnapshot<Post> snapshot) {
+                      (BuildContext context, AsyncSnapshot<Sensor> snapshot) {
                     if (snapshot.hasData) {
                       return Row(
                         mainAxisSize: MainAxisSize.min,
@@ -87,7 +100,7 @@ class _GenelWidgetState extends State<GenelWidget> {
                                       textColor: Colors.white,
                                     ),
                                     subTitle: GFTypography(
-                                      text: "title: ${snapshot.data.userId}",
+                                      text: "${snapshot.data.motorDevri} RPM",
                                       type: GFTypographyType.typo6,
                                       showDivider: false,
                                       textColor: Color(0xFF738CA6),
@@ -105,7 +118,7 @@ class _GenelWidgetState extends State<GenelWidget> {
                                       textColor: Colors.white,
                                     ),
                                     subTitle: GFTypography(
-                                      text: counter.toString(),
+                                      text: "${snapshot.data.derinlik} m",
                                       type: GFTypographyType.typo6,
                                       showDivider: false,
                                       textColor: Color(0xFF738CA6),
@@ -129,7 +142,7 @@ class _GenelWidgetState extends State<GenelWidget> {
                                       textColor: Colors.white,
                                     ),
                                     subTitle: GFTypography(
-                                      text: '0 Pa',
+                                      text: "${snapshot.data.basinc} Pa",
                                       type: GFTypographyType.typo6,
                                       showDivider: false,
                                       textColor: Color(0xFF738CA6),
@@ -147,7 +160,7 @@ class _GenelWidgetState extends State<GenelWidget> {
                                       textColor: Colors.white,
                                     ),
                                     subTitle: GFTypography(
-                                      text: '0 °C',
+                                      text: "${snapshot.data.sicaklik} °C",
                                       type: GFTypographyType.typo6,
                                       showDivider: false,
                                       textColor: Color(0xFF738CA6),
@@ -179,33 +192,17 @@ class _GenelWidgetState extends State<GenelWidget> {
                 Padding(
                   padding: EdgeInsets.all(5),
                 ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      JoystickView(size: 100),
-                      GFIconButton(
-                        color: Colors.blueGrey,
-                        onPressed: () {},
-                        icon: Icon(Icons.keyboard_arrow_up),
-                        shape: GFIconButtonShape.circle,
-                      ),
-                      GFIconButton(
-                        color: Colors.blueGrey,
-                        onPressed: () {},
-                        icon: Icon(Icons.keyboard_arrow_down),
-                        shape: GFIconButtonShape.circle,
-                      ),
-                    ])
+                _staticRow
               ],
             )
-          ]),
+          ),
     );
   }
+
 
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
-    timer?.cancel();
   }
 }
