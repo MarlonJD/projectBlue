@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
-from .models import Sensor
-from .serializers import SensorSerializer
+from rest_framework.generics import RetrieveUpdateAPIView
+from .models import Sensor, Switch
+from .serializers import SensorSerializer, SwitchSerializer
 
 
 class SensorViewSet(ModelViewSet):
@@ -10,3 +11,12 @@ class SensorViewSet(ModelViewSet):
     model = Sensor
     serializer_class = SensorSerializer
     queryset = Sensor.objects.all()
+
+
+class SwitchViewSet(ModelViewSet):
+    """
+    List switch from Rest API
+    """
+    model = Switch
+    serializer_class = SwitchSerializer
+    queryset = Switch.objects.all()

@@ -6,3 +6,9 @@ class Sensor(models.Model):
     basinc = models.IntegerField()
     derinlik = models.IntegerField()
     sicaklik = models.IntegerField()
+
+
+class Switch(models.Model):
+    lights = models.BooleanField()
+    uMotor = models.BooleanField()
+    aMotor = models.BooleanField()

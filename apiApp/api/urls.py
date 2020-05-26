@@ -4,6 +4,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'sensor', views.SensorViewSet, basename='sensors')
+router.register(r'switch', views.SwitchViewSet, basename='switchs')
 
 
 urlpatterns = [
