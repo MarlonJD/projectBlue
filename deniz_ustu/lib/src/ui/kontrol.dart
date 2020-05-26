@@ -2,30 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:denizustu/src/api/api_service.dart';
 import 'package:denizustu/src/model/post.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class KontrolWidget extends StatefulWidget {
   Sensor sensor;
-  KontrolWidget({Key key}) : super(key: key);
+  Switches switches;
+
+  /* KontrolWidget({Key key}) : super(key: key); */
+  KontrolWidget({this.switches});
+
   @override
   _KontrolWidgetState createState() => _KontrolWidgetState();
 }
 
 class _KontrolWidgetState extends State<KontrolWidget> {
+  String _baseURl;
+  String _val;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBaseUrl();
+  }
+
+  //Loading counter value on start
+  _loadBaseUrl() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _baseURl = prefs.getString('baseurl');
+      _controllerBaseUrl.text = _baseURl;
+    });
+    print(_baseURl);
+  }
+
+  Future<bool> setBaseUrl(String value) async {
+	  final SharedPreferences prefs = await SharedPreferences.getInstance();
+	  return prefs.setString('baseurl', value);
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   bool _lights = false;
-  bool _uMotor = true;
-  bool _aMotor = true;
+  bool _uMotor = false;
+  bool _aMotor = false;
 
   bool _isLoading = false;
   ApiService _apiService = ApiService();
   bool _isSuccess = false;
   bool _isFailed = false;
-  TextEditingController _controllerName = TextEditingController();
-  TextEditingController _controllerEmail = TextEditingController();
-  TextEditingController _controllerAge = TextEditingController();
+  TextEditingController _controllerBaseUrl = TextEditingController();
+  // obtain shared preferences
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +76,21 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                 onChanged: (bool value) {
                   setState(() {
                     _lights = value;
+                    Switches switches = Switches(lights: _lights, uMotor: _uMotor, aMotor: _aMotor);
+                    _apiService.sendSwitch(switches).then((isSuccess) {
+                          setState(() => _isLoading = false);
+                          if (isSuccess) {
+                            print("Gönderdi");
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Gönderildi, başarılı"),
+                            ));
+                          } else {
+                            print("Başarısız tıpkı senin gibi...");
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Submit data failed"),
+                            ));
+                          }
+                        });
                   });
                 },
                 secondary: const Icon(Icons.lightbulb_outline),
@@ -66,6 +110,21 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                     onChanged: (bool value) {
                       setState(() {
                         _uMotor = value;
+                        Switches switches = Switches(lights: _lights, uMotor: _uMotor, aMotor: _aMotor);
+                        _apiService.sendSwitch(switches).then((isSuccess) {
+                          setState(() => _isLoading = false);
+                          if (isSuccess) {
+                            print("Gönderdi");
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Gönderildi, başarılı"),
+                            ));
+                          } else {
+                            print("Başarısız tıpkı senin gibi...");
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Submit data failed"),
+                            ));
+                          }
+                        });
                       });
                     },
                     secondary: const Icon(Icons.flash_on),
@@ -76,6 +135,20 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                     onChanged: (bool value) {
                       setState(() {
                         _aMotor = value;
+                        Switches switches = Switches(lights: _lights, uMotor: _uMotor, aMotor: _aMotor);
+                    _apiService.sendSwitch(switches).then((isSuccess) {
+                          setState(() => _isLoading = false);
+                          if (isSuccess) {
+                            print("Gönderdi");
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Gönderildi, başarılı"),
+                            ));
+                          } else {
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Başarısız :("),
+                            ));
+                          }
+                        });
                       });
                     },
                     secondary: const Icon(Icons.flash_on),
@@ -94,6 +167,7 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                     ConstrainedBox(
                         constraints: BoxConstraints.tight(Size(200, 50)),
                         child: TextFormField(
+                          controller: _controllerBaseUrl,
                           decoration: const InputDecoration(
                             hintText: 'Server IP',
                           ),
@@ -106,23 +180,21 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                         )),
                     Flexible(
                         child: RaisedButton(
-                      color: Colors.blueGrey,
-                      splashColor: Color(0xFF64ffda),
-                      onPressed: () {
-                        // Validate will return true if the form is valid, or false if
-                        // the form is invalid.
-                        if (_formKey.currentState.validate()) {
-                          // Process data.
-                        }
-                      },
+                        color: Colors.blueGrey,
+                        splashColor: Color(0xFF64ffda),
+                        onPressed: () {
+                          setState(() {
+                            setBaseUrl(_controllerBaseUrl.text);
+                          });
+                          _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Kaydedildi"),
+                          ));
+                        },
                       child:
                           const Text('Kaydet', style: TextStyle(fontSize: 20)),
                     ))
                   ],
                 )),
-            _buildTextFieldName(),
-            _buildTextFieldEmail(),
-            _buildTextFieldAge(),
             // _buildButton(),
           ],
         )
@@ -130,35 +202,6 @@ class _KontrolWidgetState extends State<KontrolWidget> {
     );
   }
 
-  Widget _buildTextFieldName() {
-    return TextField(
-      controller: _controllerName,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Full name",
-      ),
-    );
-  }
-
-  Widget _buildTextFieldEmail() {
-    return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        labelText: "Email",
-      ),
-    );
-  }
-
-  Widget _buildTextFieldAge() {
-    return TextField(
-      controller: _controllerAge,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-        labelText: "Age",
-      ),
-    );
-  }
 
   Widget _buildButton() {
     return Padding(
@@ -172,26 +215,7 @@ class _KontrolWidgetState extends State<KontrolWidget> {
         ),
         onPressed: () {
           setState(() => _isLoading = true);
-          String name = _controllerName.text.toString();
-          String email = _controllerEmail.text.toString();
-          int age = int.parse(_controllerAge.text.toString());
-          Sensor sensor = Sensor(motorDevri: age, basinc: age, derinlik: age, sicaklik: age);
-          /* if (widget.post == null) {
-            _apiService.createProfile(post).then((isSuccess) {
-              setState(() => _isLoading = false);
-              if (isSuccess) {
-                print("Gönderdi");
-                _scaffoldState.currentState.showSnackBar(SnackBar(
-                  content: Text("Gönderildi, başarılı"),
-                ));
-                _isSuccess = true;
-              } else {
-                _scaffoldState.currentState.showSnackBar(SnackBar(
-                  content: Text("Olmadı, niye olmadı?"),
-                ));
-              }
-            });
-          } */
+          
         },
         color: Colors.orange[600],
       ),

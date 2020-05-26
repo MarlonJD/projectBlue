@@ -1,5 +1,31 @@
 import 'dart:convert';
 
+
+// Switch
+class Switches{
+  bool lights;
+  bool uMotor;
+  bool aMotor;
+
+  Switches({this.lights, this.uMotor, this.aMotor});
+
+  Map<dynamic, dynamic> toJson() {
+    return {"lights": lights, "uMotor": uMotor, "aMotor": aMotor};
+  }
+
+  @override
+  String toString() {
+    return 'Switch{lights: $lights, uMotor: $uMotor, aMotor: $aMotor}';
+  }
+}
+
+String switchToJson(Switches data) {
+  final jsonData = data.toJson();
+  return json.encode(jsonData);
+}
+
+
+// Sensor class
 class Sensor{
   int motorDevri;
   int basinc;
@@ -16,24 +42,11 @@ class Sensor{
       sicaklik: map["sicaklik"]
     );
   }
-
-/*   Map<dynamic, dynamic> toJson() {
-    return {"motor_devri": motor_devri, "basinc": body, "userId": userId};
-  } */
-
-/*   @override
-  String toString() {
-    return 'Post{userId: $userId, id: $id}';
-  } */
 }
 
- sensorFromJson(String jsonData) {
+sensorFromJson(String jsonData) {
   final data = json.decode(jsonData);
   Sensor sensor = new Sensor.fromJson(data);
   return sensor;
 }
 
-/* String postToJson(Post data) {
-  final jsonData = data.toJson();
-  return json.encode(jsonData);
-} */

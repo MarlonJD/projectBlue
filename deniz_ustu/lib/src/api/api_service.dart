@@ -14,16 +14,17 @@ class ApiService {
     }
   }
 
-/*   Future<bool> createProfile(Sensor data) async {
-    final response = await client.post(
-      "$baseUrl/posts",
+  Future<bool> sendSwitch(Switches data) async {
+    final response = await client.put(
+      "$baseUrl/switch/1/",
       headers: {"content-type": "application/json; charset=UTF-8"},
-      body: postToJson(data),
+      body: switchToJson(data),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return true;
     } else {
       return false;
     }
-  } */
+  }
+
 }
