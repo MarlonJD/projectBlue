@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import dj_database_url
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -33,10 +32,7 @@ try:
 except KeyError:
     DEBUG = True
 
-if DEBUG:
-    ALLOWED_HOSTS = ['192.168.1.40', ]
-else:
-    ALLOWED_HOSTS = ['.herokuapp.com', ]
+ALLOWED_HOSTS = ['192.168.1.40', '192.168.1.55']
 
 
 # Application definition
@@ -48,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',
     'whitenoise.runserver_nostatic',
     'crispy_forms',
     'rest_framework',
@@ -91,17 +86,14 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-else:
-    DATABASES = {}
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600,
-                                                  ssl_require=True)
+}
+
 
 
 # Password validation
