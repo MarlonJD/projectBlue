@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
-from .models import Sensor, Switch
+from .models import Sensor, Switch, Motor
 
 
 class SensorSerializer(serializers.ModelSerializer):
@@ -12,6 +11,12 @@ class SensorSerializer(serializers.ModelSerializer):
 class SwitchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Switch
+        fields = '__all__'
+
+
+class MotorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Motor
         fields = '__all__'
 
     # def update(self, instance, validated_data):
