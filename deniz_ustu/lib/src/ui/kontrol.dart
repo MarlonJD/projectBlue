@@ -8,7 +8,7 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class KontrolWidget extends StatefulWidget {
   Sensor sensor;
-  Switches switches;
+  Motor switches;
 
   /* KontrolWidget({Key key}) : super(key: key); */
   KontrolWidget({this.switches});
@@ -44,9 +44,10 @@ class _KontrolWidgetState extends State<KontrolWidget> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool _lights = false;
-  bool _uMotor = false;
-  bool _aMotor = false;
+  bool _d1 = false;
+  bool _d2 = false;
+  bool _motor1 = false;
+  bool _motor2 = false;
 
   bool _isLoading = false;
   ApiService _apiService = ApiService();
@@ -68,16 +69,18 @@ class _KontrolWidgetState extends State<KontrolWidget> {
               padding: EdgeInsets.zero,
               title: GFListTile(
                 margin: EdgeInsets.zero,
-                title: Text('Çevre'),
+                title: Text('Motor Yönü'),
               ),
-              content: SwitchListTile(
-                title: const Text('Aydınlatma'),
-                value: _lights,
+              content: Column(
+                children: [
+              SwitchListTile(
+                title: const Text('Üst Motor Yönü'),
+                value: _d1,
                 onChanged: (bool value) {
                   setState(() {
-                    _lights = value;
-                    Switches switches = Switches(lights: _lights, uMotor: _uMotor, aMotor: _aMotor);
-                    _apiService.sendSwitch(switches).then((isSuccess) {
+                    _d1 = value;
+                    Motor switches = Motor(d1: _d1, d2: _d2, motor1: _motor1, motor2: _motor2);
+                    _apiService.sendMotor(switches).then((isSuccess) {
                           setState(() => _isLoading = false);
                           if (isSuccess) {
                             print("Gönderdi");
@@ -95,6 +98,32 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                 },
                 secondary: const Icon(Icons.lightbulb_outline),
               ),
+              SwitchListTile(
+                title: const Text('Alt Motor Yönü'),
+                value: _d2,
+                onChanged: (bool value) {
+                  setState(() {
+                    _d2 = value;
+                    Motor switches = Motor(d1: _d1, d2: _d2, motor1: _motor1, motor2: _motor2);
+                    _apiService.sendMotor(switches).then((isSuccess) {
+                          setState(() => _isLoading = false);
+                          if (isSuccess) {
+                            print("Gönderdi");
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Gönderildi, başarılı"),
+                            ));
+                          } else {
+                            print("Başarısız tıpkı senin gibi...");
+                            _scaffoldState.currentState.showSnackBar(SnackBar(
+                              content: Text("Submit data failed"),
+                            ));
+                          }
+                        });
+                  });
+                },
+                secondary: const Icon(Icons.lightbulb_outline),
+              ),
+              ])
             ),
             GFCard(
                 color: Color(0xFF4A6A8A),
@@ -106,12 +135,12 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                 content: Column(children: [
                   SwitchListTile(
                     title: const Text('Üst Motor'),
-                    value: _uMotor,
+                    value: _motor1,
                     onChanged: (bool value) {
                       setState(() {
-                        _uMotor = value;
-                        Switches switches = Switches(lights: _lights, uMotor: _uMotor, aMotor: _aMotor);
-                        _apiService.sendSwitch(switches).then((isSuccess) {
+                        _motor1 = value;
+                        Motor switches = Motor(d1: _d1, d2: _d2, motor1: _motor1, motor2: _motor2);
+                        _apiService.sendMotor(switches).then((isSuccess) {
                           setState(() => _isLoading = false);
                           if (isSuccess) {
                             print("Gönderdi");
@@ -131,12 +160,12 @@ class _KontrolWidgetState extends State<KontrolWidget> {
                   ),
                   SwitchListTile(
                     title: const Text('Alt Motor'),
-                    value: _aMotor,
+                    value: _motor2,
                     onChanged: (bool value) {
                       setState(() {
-                        _aMotor = value;
-                        Switches switches = Switches(lights: _lights, uMotor: _uMotor, aMotor: _aMotor);
-                    _apiService.sendSwitch(switches).then((isSuccess) {
+                        _motor2 = value;
+                        Motor switches = Motor(d1: _d1, d2: _d2, motor1: _motor1, motor2: _motor2);
+                    _apiService.sendMotor(switches).then((isSuccess) {
                           setState(() => _isLoading = false);
                           if (isSuccess) {
                             print("Gönderdi");

@@ -5,6 +5,7 @@ import 'package:control_pad/control_pad.dart';
 import 'package:video_player/video_player.dart';
 import 'package:denizustu/src/model/post.dart';
 import 'dart:async';
+import 'package:denizustu/src/ui/mjpeg_view.dart';
 
 class GenelWidget extends StatefulWidget {
   @override
@@ -16,6 +17,8 @@ class _GenelWidgetState extends State<GenelWidget> with AutomaticKeepAliveClient
   ApiService apiService;
   BuildContext context;
   Row _staticRow;
+  final video_url =
+      'http://192.168.1.55:8000/stream.mjpg';
 
   @override
   bool get wantKeepAlive => true; // ** and here
@@ -24,13 +27,6 @@ class _GenelWidgetState extends State<GenelWidget> with AutomaticKeepAliveClient
   void initState() {
     super.initState();
     apiService = ApiService();
-    _controller = VideoPlayerController.network(
-        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4')
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
-    _controller.play();
 
     // _fetchData() is your function to fetch data
     Timer.periodic(Duration(milliseconds: 500), (Timer t) => _fetchData());
@@ -69,12 +65,7 @@ class _GenelWidgetState extends State<GenelWidget> with AutomaticKeepAliveClient
           child: 
             Column(
               children: [
-                _controller.value.initialized
-                    ? AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
-                      )
-                    : Container(),
+                Center(child: MjpegView(url: video_url, fps: 60)),
                 Padding(
                   padding: EdgeInsets.all(5),
                 ),
@@ -94,13 +85,13 @@ class _GenelWidgetState extends State<GenelWidget> with AutomaticKeepAliveClient
                                     color: Color(0xFF4A6A8A),
                                     margin: EdgeInsets.zero,
                                     title: GFTypography(
-                                      text: 'Motor Deviri',
+                                      text: 'Deniz Seviyesi',
                                       type: GFTypographyType.typo5,
                                       showDivider: false,
                                       textColor: Colors.white,
                                     ),
                                     subTitle: GFTypography(
-                                      text: "${snapshot.data.motorDevri} RPM",
+                                      text: "${snapshot.data.denizSeviyesi} Pa",
                                       type: GFTypographyType.typo6,
                                       showDivider: false,
                                       textColor: Color(0xFF738CA6),
@@ -203,6 +194,5 @@ class _GenelWidgetState extends State<GenelWidget> with AutomaticKeepAliveClient
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
   }
 }

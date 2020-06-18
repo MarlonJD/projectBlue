@@ -2,24 +2,25 @@ import 'dart:convert';
 
 
 // Switch
-class Switches{
-  bool lights;
-  bool uMotor;
-  bool aMotor;
+class Motor{
+  bool d1;
+  bool d2;
+  bool motor1;
+  bool motor2;
 
-  Switches({this.lights, this.uMotor, this.aMotor});
+  Motor({this.d1, this.d2, this.motor1, this.motor2});
 
   Map<dynamic, dynamic> toJson() {
-    return {"lights": lights, "uMotor": uMotor, "aMotor": aMotor};
+    return {"d1": d1, "d2": d2, "motor1": motor1, "motor2": motor2};
   }
 
   @override
   String toString() {
-    return 'Switch{lights: $lights, uMotor: $uMotor, aMotor: $aMotor}';
+    return 'Switch{d1: $d1, d2: $d2, motor1: $motor1, motor2: $motor2}';
   }
 }
 
-String switchToJson(Switches data) {
+String switchToJson(Motor data) {
   final jsonData = data.toJson();
   return json.encode(jsonData);
 }
@@ -27,16 +28,16 @@ String switchToJson(Switches data) {
 
 // Sensor class
 class Sensor{
-  int motorDevri;
+  int denizSeviyesi;
   int basinc;
   int derinlik ;
   int sicaklik;
 
-  Sensor({this.motorDevri, this.basinc, this.derinlik, this.sicaklik});
+  Sensor({this.denizSeviyesi, this.basinc, this.derinlik, this.sicaklik});
 
   factory Sensor.fromJson(Map<String, dynamic> map) {
     return Sensor(
-      motorDevri: map["motor_devri"],
+      denizSeviyesi: map["deniz_seviyesi"],
       basinc: map["basinc"],
       derinlik: map["derinlik"],
       sicaklik: map["sicaklik"]
@@ -49,4 +50,3 @@ sensorFromJson(String jsonData) {
   Sensor sensor = new Sensor.fromJson(data);
   return sensor;
 }
-
