@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:ffi';
+
 
 // Switch
 class Motor{
@@ -11,12 +13,12 @@ class Motor{
   Motor({this.d1, this.d2, this.motor1, this.motor2});
 
   Map<dynamic, dynamic> toJson() {
-    return {"d1": d1, "d2": d2, "motor1": motor1, "motor2": motor2};
+    return {"d1": d1, "d2": d2, "m1": motor1, "m2": motor2};
   }
 
   @override
   String toString() {
-    return 'Switch{d1: $d1, d2: $d2, motor1: $motor1, motor2: $motor2}';
+    return 'Switch{d1: $d1, d2: $d2, m1: $motor1, m2: $motor2}';
   }
 }
 
@@ -28,10 +30,10 @@ String switchToJson(Motor data) {
 
 // Sensor class
 class Sensor{
-  int denizSeviyesi;
-  int basinc;
-  int derinlik ;
-  int sicaklik;
+  String denizSeviyesi;
+  String basinc;
+  String derinlik ;
+  String sicaklik;
 
   Sensor({this.denizSeviyesi, this.basinc, this.derinlik, this.sicaklik});
 
